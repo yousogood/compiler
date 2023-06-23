@@ -1,3 +1,4 @@
+
 cmake_minimum_required(VERSION 3.4.3)
 project(compiler)
 
@@ -5,7 +6,8 @@ project(compiler)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Release)
-list(APPEND CMAKE_PREFIX_PATH "D:\LLVM\llvm\llvm\llvm_vs_64\lib\cmake\llvm") 
+# list(APPEND CMAKE_PREFIX_PATH "D:/LLVM/llvm/llvm/llvm_64/lib/cmake/llvm") 
+# list(APPEND CMAKE_PREFIX_PATH "C:\Users\hp\Desktop\files\llvm\llvm_64\lib\cmake\llvm") 
 
 find_package(LLVM REQUIRED CONFIG)
 
@@ -14,13 +16,18 @@ message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 
 
 include_directories(${LLVM_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR}/include)
 add_definitions(${LLVM_DEFINITIONS})
 
+aux_source_directory(${PROJECT_SOURCE_DIR}/src src)
+
 # Now build our tools
-add_executable(compiler 	tool.cpp)
+add_executable(toy ${src})
 
 llvm_map_components_to_libnames(llvm_libs support Core ExecutionEngine Object OrcJIT TargetParser native)
 
 # Link against LLVM libraries
-target_link_libraries(compiler ${llvm_libs})
+target_link_libraries(toy ${llvm_libs})
+
+
 
